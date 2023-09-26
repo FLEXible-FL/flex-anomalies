@@ -1,7 +1,7 @@
 from models import BaseModel
-from sklearn.decomposition import PCA as sklearn_PCA
-
-
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+import numpy as np
 class PCA_Anomaly(BaseModel):
     def __init__(
         self,
@@ -13,6 +13,7 @@ class PCA_Anomaly(BaseModel):
         tol=0.0,
         iterated_power="auto",
         random_state=None,
+        scaler = True
     ) -> None:
         super(PCA_Anomaly, self).__init__()
         self.n_components = n_components
@@ -23,10 +24,11 @@ class PCA_Anomaly(BaseModel):
         self.tol = tol
         self.iterated_power = iterated_power
         self.random_state = random_state
+        self.scaler = scaler
         self.model = self._build_model()
 
     def _build_model(self):
-        model = sklearn_PCA(
+        model = PCA(
             n_components=self.n_components,
             copy=self.copy,
             whiten=self.whiten,
@@ -43,4 +45,17 @@ class PCA_Anomaly(BaseModel):
         X : numpy array of shape (samples, features)
         y:  Ignored in unsupervised methods
         """
-        self.model.fit(X=X, y=y)
+        
+        # Standardize data
+        if self.scaler:
+             X_scaler = StandardScaler().fit_transform(X)
+        else:
+             X_scaler = np.copy(X)
+
+        self.model.fit(X=X_scaler, y=y)
+        
+    def predict_outlier(self, X):
+        pass
+
+    def evaluate(self, X):
+        pass 
