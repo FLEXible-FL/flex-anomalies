@@ -1,5 +1,7 @@
 from models import BaseModel
-
+from sklearn.ensemble import IsolationForest as sklearn_IF
+from sklearn.preprocessing import StandardScaler
+import numpy as np
 class IsolationForest(BaseModel):
     """
       IsolationForest with scikit-learn
@@ -10,7 +12,9 @@ class IsolationForest(BaseModel):
       bootstrap : bool, optional (default=False)
       max_features : float or int, optional (default=1.0)   
       n_jobs : int, optional (default=1)
-      contamination : float, optional (default=0.1)
+      contamination : float in (0., 0.5), optional (default=0.1)
+                      Contamination of the data set, the proportion of outliers in the data set.
+
     """
     def __init__(self, n_estimators=100,
                  max_samples="auto",
@@ -21,7 +25,7 @@ class IsolationForest(BaseModel):
                  behaviour='old',
                  random_state=None,
                  verbose=0):
-        super(IsolationForest, self).__init__()
+        super(IsolationForest, self).__init__(contamination = contamination)
         self.n_estimators = n_estimators
         self.max_samples = max_samples
         self.contamination = contamination
@@ -31,11 +35,12 @@ class IsolationForest(BaseModel):
         self.behaviour = behaviour
         self.random_state = random_state
         self.verbose = verbose
+    
         self.model = self._build_model() 
 
 
     def _build_model(self):
-        model = IsolationForest(n_estimators=self.n_estimators,
+        model = sklearn_IF(n_estimators=self.n_estimators,
                                          max_samples=self.max_samples,
                                          contamination=self.contamination,
                                          max_features=self.max_features,
@@ -44,5 +49,29 @@ class IsolationForest(BaseModel):
                                          random_state=self.random_state,
                                          verbose=self.verbose)
         return model
+
     def fit(self, X, y=None):
-        self.model.fit(X=X, y=y)   
+        """
+        X : numpy array of shape (samples, features)
+        y:  Ignored in unsupervised methods
+
+        """
+        self.model.fit(X=X, y=y) 
+        
+
+    def predict(self, X):
+        self.d_scores_ = self.model.decision_function(X)
+        self.d_scores_ = self.d_scores_ * -1     # Invert order scores. Outliers have higher scores
+        self.process_scores()
+        return self
+
+    def decision_function(self,X):    
+
+         """
+         X : numpy array of shape (n_samples, n_features)
+
+         Returns  anomaly scores : numpy array of shape (n_samples,)
+                 The anomaly score of the input samples.
+        """
+         return (self.model.decision_function(X)) * -1  
+        
