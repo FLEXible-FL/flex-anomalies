@@ -1,7 +1,10 @@
 from keras.models import Sequential
 from keras.layers import Dense
 from models import BaseModel
-
+from sklearn.preprocessing import StandardScaler
+import numpy as np
+from utils.metrics import *
+from sklearn.preprocessing import StandardScaler
 class AutoEncoder(BaseModel):
 
     """
@@ -10,7 +13,7 @@ class AutoEncoder(BaseModel):
     hidden_act : str or list, optional default='relu'
          All hidden layers do not necessarily have to use the same activation type.
 
-    output_act: str, optional (default='linear'),output activation of the final laye
+    output_act: str, optional (default='linear'),output activation of the final layer
 
 
     loss : str or obj, optional (default= 'mse')
@@ -31,6 +34,13 @@ class AutoEncoder(BaseModel):
         The percentage of data to be used for validation.
 
     callbacks: list, tensorflow callbacks
+    
+    input_dim : int, number of features 
+
+    contamination : float in (0., 0.5), optional (default=0.1)
+         Contamination of the data set, the proportion of outliers in the data set.
+
+
     """
 
     def __init__(
@@ -43,10 +53,12 @@ class AutoEncoder(BaseModel):
         loss="mse",
         validation_size=0.2,
         batch_size=32,
-        epoch=1,
+        epochs=1,
         optimizer="adam",
+        contamination = 0.1,
+        preprocess = True 
     ) -> None:
-        super(AutoEncoder, self).__init__()
+        super(AutoEncoder, self).__init__(contamination = contamination)
         self.input_dim = input_dim
         self.neurons = neurons
         self.callbacks = callbacks
@@ -66,8 +78,11 @@ class AutoEncoder(BaseModel):
         self.loss = loss
         self.validation_size = validation_size
         self.batch_size = batch_size
-        self.epoch = epoch
+        self.epochs = epochs
         self.optimizer = optimizer
+        self.preprocess = preprocess
+        self.scaler = StandardScaler()
+        
         self.model = self._build_model()
 
     def _build_model(self):
@@ -99,23 +114,55 @@ class AutoEncoder(BaseModel):
         y:  Ignored in unsupervised methods
 
         """
-        self.history = self.model.fit(
-            X,
-            X,
-            epochs=self.epoch,
+
+        if self.preprocess:
+            Xscaler = self.scaler.fit_transform(X)
+        else:
+            Xscaler= np.copy(X)
+
+        np.random.shuffle(Xscaler)
+
+        self.history_ = self.model.fit(
+            Xscaler,
+            Xscaler,
+            epochs=self.epochs,
             batch_size=self.batch_size,
             shuffle=True,
             validation_split=self.validation_size,
             verbose=1,
         ).history
 
-    def predict_outlier(self, X):
-        pred = self.model.predict(X)
-        # scores = metric(data,pred)
-        # process_scores
+        
+    def predict(self, X):
+        if self.preprocess:
+            Xscaler = self.scaler.transform(X)
+        else:
+            Xscaler = np.copy(X)
 
-    def evaluate(self, X):
-        pass
+        prediction_scores = self.model.predict(Xscaler)
+        self.d_scores_ = distances(Xscaler,prediction_scores)       
+        
+        self.process_scores()
+        
+        return self 
+    
+    def decision_function(self,X):
+        """
+         X : numpy array of shape (n_samples, n_features)
+
+         Returns  anomaly scores : numpy array of shape (n_samples,)
+                 The anomaly score of the input samples.
+        """
+
+        if self.preprocess:
+            Xscaler = self.scaler.transform(X)
+        else:
+            Xscaler = np.copy(X)
+
+        # Predict X and return reconstruction errors
+        prediction_scores = self.model.predict(Xscaler)
+        return distances(Xscaler, prediction_scores)
+   
 
     def load_pretrained_model(self, model_path="./pretrained/autoencoder"):
         self.model.load_weights(model_path)
