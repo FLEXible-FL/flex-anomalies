@@ -59,27 +59,39 @@ def print_metrics(list_metrics,y, y_prediction):
                 function to print the metrics:
                 list_metrics: list, containing list of metrics to display, metrics name (Accuracy, Precision, F1, Recall, AUC_ROC, ConfusionMatrix). 
         """
+        metrics = []
+
         for i in list_metrics:
             if i == "Accuracy":
                   acc = metric_accuracy(y, y_prediction)
+                  metrics.append('%.3f%%'%acc)
                   print('Acc: %.3f%% \n'%acc)
+                  
 
             if i == "Recall":
                   r = metric_recall(y, y_prediction)
+                  metrics.append('%.3f'%r)
                   print('Recall: %.3f \n'%r)
 
             if i == "F1":
                   f1 = metric_F1score(y, y_prediction)
+                  metrics.append('%.3f'%f1)
                   print('F1score: %.3f \n'%f1)
 
             if i == "Precision":
                   p = metric_precision(y, y_prediction)
+                  metrics.append('%.3f'%p)
                   print('Precision: %.3f \n'%p)
+
             if i == "AUC_ROC":
                   auc = metric_AUC_ROC(y, y_prediction) 
+                  metrics.append('%.3f'%auc)
                   print('AUC_ROC: %.3f \n'%auc)
+
             if i == "ConfusionMatrix":
-                  cm = confusion_matrix(y, y_prediction)              
+                  cm = confusion_matrix(y, y_prediction) 
+
+        return metrics
 
 def distances(y, y_prediction):
           return (np.linalg.norm(y - y_prediction, axis = 1))

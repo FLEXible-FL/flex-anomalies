@@ -3,7 +3,7 @@ import tensorflow as tf
 from keras.models import Sequential
 from keras import layers
 import numpy as np
-
+from utils.metrics import *
 class DeepCNN_LSTM(BaseModel):
     """ 
     neurons_cnn: list, containing the dimensionality of each CNN 1D layer
@@ -132,8 +132,15 @@ class DeepCNN_LSTM(BaseModel):
         y:  Ignored in unsupervised methods
 
         """
+
+        if self.preprocess:
+            Xscaler = self.scaler.fit_transform(X)
+        else:
+            Xscaler= np.copy(X)
+
+        #np.random.shuffle(Xscaler)
         self.history = self.model.fit(
-            X,
+            Xscaler,
             y,
             epochs=self.epoch,
             batch_size=self.batch_size,
@@ -144,15 +151,35 @@ class DeepCNN_LSTM(BaseModel):
 
 
     
-    def predict(self, X):   # terminar definir 
+    def predict(self, X):
         if self.preprocess:
-               Xscaler = self.scaler.transform(X)
+            Xscaler = self.scaler.transform(X)
         else:
-               Xscaler = np.copy(X)
+            Xscaler = np.copy(X)
 
-        self.model.predict(Xscaler)
+        prediction_scores = self.model.predict(Xscaler)
+        self.d_scores_ = distances(Xscaler,prediction_scores)       
         
+        self.process_scores()
+        
+        return self 
+    
+    def decision_function(self,X):
+        """
+         X : numpy array of shape (n_samples, n_features)
 
+         Returns  anomaly scores : numpy array of shape (n_samples,)
+                 The anomaly score of the input samples.
+        """
+
+        if self.preprocess:
+            Xscaler = self.scaler.transform(X)
+        else:
+            Xscaler = np.copy(X)
+
+        # Predict X and return reconstruction errors
+        prediction_scores = self.model.predict(Xscaler)
+        return distances(Xscaler, prediction_scores)
 
     def load_pretrained_model(self, model_path="./pretrained/cnn_lstm"):
         self.model.load_weights(model_path)
