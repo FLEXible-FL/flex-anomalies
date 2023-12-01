@@ -62,7 +62,13 @@ class PCA_Anomaly(BaseModel):
         
         self.model.fit(X=Xscaler, y=y)
 
+        
+    def predict (self,X):
 
+        if self.preprocess:
+             Xscaler = self.scaler.fit_transform(X)
+        else:
+             Xscaler = np.copy(X)
 
         # attributes from the sklearn PCA 
         self.n_components_ = self.model.n_components_
@@ -83,15 +89,16 @@ class PCA_Anomaly(BaseModel):
         self.selected_w_components_ = self.w_components_[
                                       -1 * self.n_selected_components_:]
 
-        self.decision_scores_ = np.sum(
-            cdist(X, self.selected_components_) / self.selected_w_components_,
+        self.d_scores_ = np.sum(
+            cdist(Xscaler, self.selected_components_) / self.selected_w_components_,
             axis=1).ravel()
 
         self.process_scores()
-        return self         
+        return self    
+       
         
         
-    def decision_funcion(self, X):
+    def decision_function(self, X):
          """
          X : numpy array of shape (n_samples, n_features)
 

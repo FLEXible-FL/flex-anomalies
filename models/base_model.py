@@ -38,9 +38,9 @@ class BaseModel(object):
     def decision_function():
         pass
 
-    def evaluate(self, X, y =None, metrics = ["Accuracy", "Precision", "F1", "Recall", "AUC_ROC", "ConfusionMatrix"]):
+    def evaluate(self, X, y =None, metrics = ["Accuracy", "Precision", "F1", "Recall", "AUC_ROC"]):
         self.predict(X)
-        print_metrics(metrics,y,self.labels_)
+        self.result_metrics_= print_metrics(metrics,y,self.labels_)
 
 
     def process_scores(self):
