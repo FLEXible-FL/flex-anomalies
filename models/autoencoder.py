@@ -64,7 +64,7 @@ class AutoEncoder(BaseModel):
         super(AutoEncoder, self).__init__(contamination = contamination)
         self.input_dim = input_dim
         self.neurons = neurons
-        self.model_path = model_path if model_path else f'temp/autoencoder_{datetime.now().isoformat()}'
+        self.model_path = model_path
         self.callbacks = []
         self.update_callbacks(callbacks=callbacks)
         self.hidden_act = (

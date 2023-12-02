@@ -1,0 +1,18 @@
+{
+    "model_name": "pca_anomaly",
+    "dataset": "datasets/shuttle.mat",
+    "model_params": {
+        "n_components": 4,
+        "contamination": 0.1
+    },
+    "output_metrics": {
+        "Accuracy": "96.925%",
+        "Precision": "0.715",
+        "F1": "0.823",
+        "Recall": "0.970",
+        "AUC_ROC": "0.969"
+    },
+    "n_clients": 5,
+    "n_rounds": 5,
+    "split_size": 0.3
+}

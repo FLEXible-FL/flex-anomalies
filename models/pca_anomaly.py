@@ -3,7 +3,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 from scipy.spatial.distance import cdist
-
+import pickle
 class PCA_Anomaly(BaseModel):
     def __init__(
         self,
@@ -15,7 +15,7 @@ class PCA_Anomaly(BaseModel):
         tol=0.0,
         iterated_power="auto",
         random_state=None,
-        scaler = True,
+        model_path = '',
         contamination = 0.1,
         preprocess = True,
         weighted = True
@@ -31,6 +31,7 @@ class PCA_Anomaly(BaseModel):
         self.random_state = random_state
         self.weighted = weighted,
         self.preprocess = preprocess
+        self.model_path = model_path 
         self.scaler = StandardScaler()
 
         self.model = self._build_model()
@@ -109,6 +110,15 @@ class PCA_Anomaly(BaseModel):
             cdist(X, self.selected_components_) / self.selected_w_components_,
             axis=1).ravel()
 
+
+    def load_model(self, model_path=''):
+        self.model = pickle.load(open(f"{model_path}/model.pkl" if model_path else f"{self.model_path}/model.pkl", 'rb'))
+
+    def save_model(self, model_path=''):
+        if not model_path and not self.model_path:
+            raise "You must provide a path to save model"
+        pickle.dump(self.model, open(f"{model_path}/model.pkl" if model_path else f"{self.model_path}/model.pkl",'wb'))                
+     
 
 
        

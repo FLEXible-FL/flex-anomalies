@@ -1,0 +1,18 @@
+{
+    "model_name": "cluster",
+    "dataset": "datasets/shuttle.mat",
+    "model_params": {
+        "n_clusters": 4,
+        "contamination": 0.1
+    },
+    "output_metrics": {
+        "Accuracy": "93.761%",
+        "Precision": "0.548",
+        "F1": "0.637",
+        "Recall": "0.761",
+        "AUC_ROC": "0.856"
+    },
+    "n_clients": 5,
+    "n_rounds": 5,
+    "split_size": 0.3
+}

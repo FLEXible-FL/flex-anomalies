@@ -18,11 +18,11 @@
         "contamination": 0.1
     },
     "output_metrics": {
-        "Accuracy": "93.035%",
-        "Precision": "0.503",
-        "F1": "0.591",
-        "Recall": "0.716",
-        "AUC_ROC": "0.831"
+        "Accuracy": "92.458%",
+        "Precision": "0.475",
+        "F1": "0.557",
+        "Recall": "0.675",
+        "AUC_ROC": "0.809"
     },
     "n_clients": 3,
     "n_rounds": 5,

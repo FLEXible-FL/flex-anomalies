@@ -1,6 +1,8 @@
 from models import BaseModel
 from sklearn.cluster import KMeans
 import numpy as np
+from datetime import datetime
+import pickle
 
 class ClusterAnomaly(BaseModel):
     def __init__(
@@ -12,8 +14,10 @@ class ClusterAnomaly(BaseModel):
         tol = 0.0001,
         n_init = 1,
         verbose = True,
-        algorithm ='full',
+        algorithm ='lloyd',
+        model_path = '',
         contamination = 0.1
+
     )-> None:
         super(ClusterAnomaly, self).__init__(contamination = contamination)
         self.n_clusters = n_clusters
@@ -24,6 +28,7 @@ class ClusterAnomaly(BaseModel):
         self.verbose = verbose
         self.n_init = n_init
         self.algorithm = algorithm
+        self.model_path = model_path
         self.model = self._build_model()
         
 
@@ -66,11 +71,11 @@ class ClusterAnomaly(BaseModel):
         scores = np.min(dist, axis = 1) 
         return scores
 
-                           
-          # # memory efficient
-        # sq_dist = np.zeros((len(X), self.n_clusters))
-        # for i in range(self.n_clusters):
-        #     sq_dist[:, i] = np.sum(np.square(x - self.cluster_centers_[i, :]), axis=1)
-        # labels = np.argmin(sq_dist, axis=1)
-        # return labels
-        
+    def load_model(self, model_path=''):
+        self.model = pickle.load(open(f"{model_path}/model.pkl" if model_path else f"{self.model_path}/model.pkl", 'rb'))
+
+    def save_model(self, model_path=''):
+        if not model_path and not self.model_path:
+            raise "You must provide a path to save model"
+        pickle.dump(self.model, open(f"{model_path}/model.pkl" if model_path else f"{self.model_path}/model.pkl",'wb'))                
+     
