@@ -5,6 +5,8 @@ from sklearn.preprocessing import StandardScaler
 import numpy as np
 from utils.metrics import *
 from sklearn.preprocessing import StandardScaler
+import tensorflow as tf
+from datetime import datetime
 class AutoEncoder(BaseModel):
 
     """
@@ -47,7 +49,8 @@ class AutoEncoder(BaseModel):
         self,
         input_dim,
         neurons,
-        callbacks,
+        model_path = '',
+        callbacks = [],
         hidden_act="relu",
         output_act="linear",
         loss="mse",
@@ -61,7 +64,9 @@ class AutoEncoder(BaseModel):
         super(AutoEncoder, self).__init__(contamination = contamination)
         self.input_dim = input_dim
         self.neurons = neurons
-        self.callbacks = callbacks
+        self.model_path = model_path if model_path else f'temp/autoencoder_{datetime.now().isoformat()}'
+        self.callbacks = []
+        self.update_callbacks(callbacks=callbacks)
         self.hidden_act = (
             list(hidden_act) * len(neurons)
             if type(hidden_act) is not list
@@ -85,6 +90,12 @@ class AutoEncoder(BaseModel):
         
         self.model = self._build_model()
 
+
+    def update_callbacks(self, callbacks):
+        model_checkpoint_callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=10, min_delta=0.005)
+        self.callbacks = [model_checkpoint_callback]+callbacks
+
+
     def _build_model(self):
         model = Sequential()
         # Input layer
@@ -105,7 +116,6 @@ class AutoEncoder(BaseModel):
 
         # Compile model
         model.compile(loss=self.loss, optimizer=self.optimizer)
-        print(model.summary())
         return model
 
     def fit(self, X, y=None):
@@ -130,12 +140,14 @@ class AutoEncoder(BaseModel):
             shuffle=True,
             validation_split=self.validation_size,
             verbose=1,
+            callbacks=self.callbacks
         ).history
+        # self.model.load_weights(self.model_path)
 
-        
+
     def predict(self, X):
         if self.preprocess:
-            Xscaler = self.scaler.transform(X)
+            Xscaler = self.scaler.fit_transform(X)
         else:
             Xscaler = np.copy(X)
 
@@ -164,8 +176,10 @@ class AutoEncoder(BaseModel):
         return distances(Xscaler, prediction_scores)
    
 
-    def load_pretrained_model(self, model_path="./pretrained/autoencoder"):
-        self.model.load_weights(model_path)
+    def load_model(self, model_path=''):
+        self.model.load_weights(model_path if model_path else self.model_path)
 
-    def save_model(self, model_path="./pretrained/autoencoder"):
-        self.model.save_weights(model_path)
+    def save_model(self, model_path=''):
+        if not model_path and not self.model_path:
+            raise "You must provide a path to save model"
+        self.model.save_weights(model_path if model_path else self.model_path)
