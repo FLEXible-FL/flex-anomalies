@@ -1,0 +1,10 @@
+{
+    "model": "iforest",
+    "dataset": "flexanomalies/datasets/data/shuttle.mat",
+    "split_size":0.3,
+    "n_clients":5,
+    "params": {
+       
+        "contamination": 0.1
+    }
+}

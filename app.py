@@ -1,4 +1,4 @@
-from experiments.experiments_static import hub, model_tests
+from main_static import hub, model_tests
 import argparse
 
 
@@ -35,3 +35,5 @@ if __name__ == "__main__":
     args = {k:v for k,v in args.__dict__.items() if v is not None}
     print(args)
     hub(**args)
+
+    # hub()    

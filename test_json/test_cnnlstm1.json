@@ -1,0 +1,32 @@
+{
+    "model": "cnn_lstm",
+    "dataset": "flexanomalies/datasets/data/corrected.gz",
+    "split_size":0.3,
+    "params": {
+        "epochs": 5,
+        "input_dim": 9,
+        "batch_size": 32,
+
+        "filters_cnn": [
+            16,
+            8,
+            4
+        ],
+        "units_lstm": [
+            32,
+            32
+        ],
+        "kernel_size": [
+            8,
+            4,
+            8
+        ],
+        "hidden_act": [
+            "relu",
+            "relu"
+        ],
+        "n_pred": 1,
+
+        "contamination": 0.1
+    }
+}
