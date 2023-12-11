@@ -1,0 +1,21 @@
+{
+    "model": "autoencoder",
+    "dataset": "flexanomalies/datasets/data/shuttle.mat",
+    "split_size":0.3,
+    "params": {
+        "epochs": 5,
+        "input_dim": 9,
+        "batch_size": 32,
+        "neurons": [
+            8,
+            4,
+            8
+        ],
+        "hidden_act": [
+            "relu",
+            "relu",
+            "relu"
+        ],
+        "contamination": 0.1
+    }
+}
