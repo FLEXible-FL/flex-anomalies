@@ -1,6 +1,7 @@
 import os
 import json
 
+
 def save_experiments_results(
     model_name,
     model,
@@ -27,6 +28,6 @@ def save_experiments_results(
         indent=4,
         ensure_ascii=False,
     )
-    model_path = f'{output_path}/model/'
+    model_path = f"{output_path}/model/"
     os.makedirs(model_path, exist_ok=True)
     model.save_model(model_path)
