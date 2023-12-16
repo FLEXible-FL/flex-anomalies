@@ -1,13 +1,52 @@
-from flexanomalies.models import AutoEncoder, ClusterAnomaly,IsolationForest,PCA_Anomaly
+from flexanomalies.models import (
+    AutoEncoder,
+    ClusterAnomaly,
+    IsolationForest,
+    PCA_Anomaly,
+)
 from flexanomalies.utils.load_data import load_and_split_dot_mat, federate_data
-from flexanomalies.pool.decorators_autoencoder import build_server_model_ae, copy_model_to_clients_ae,train_ae, aggregate_ae, set_aggregated_weights_ae, weights_collector_ae
-from flexanomalies.pool.decorators_cluster import build_server_model_cl, copy_model_to_clients_cl,train_cl, aggregate_cl, set_aggregated_weights_cl, get_clients_weights_cl
-from flexanomalies.pool.decorators_iforest import build_server_model_if, copy_model_to_clients_if,train_if, aggregate_if, set_aggregated_weights_if,get_clients_weights_if
-from flexanomalies.pool.decorators_pca import build_server_model_pca, copy_model_to_clients_pca,train_pca, aggregate_pca, set_aggregated_weights_pca, get_clients_weights_pca
+from flexanomalies.pool.primitives_deepmodel import (
+    build_server_model_ae,
+    copy_model_to_clients_ae,
+    train_ae,
+    set_aggregated_weights_ae,
+    weights_collector_ae,
+)
+from flexanomalies.pool.aggregators_favg import aggregate_ae
+from flexanomalies.pool.aggregators_cl import aggregate_cl
+from flexanomalies.pool.aggregators_pca import aggregate_pca
+from flexanomalies.pool.primitives_cluster import (
+    build_server_model_cl,
+    copy_model_to_clients_cl,
+    train_cl,
+    set_aggregated_weights_cl,
+    get_clients_weights_cl,
+)
+from flexanomalies.pool.primitives_iforest import (
+    build_server_model_if,
+    copy_model_to_clients_if,
+    train_if,
+    aggregate_if,
+    set_aggregated_weights_if,
+    get_clients_weights_if,
+)
+from flexanomalies.pool.primitives_pca import (
+    build_server_model_pca,
+    copy_model_to_clients_pca,
+    train_pca,
+    set_aggregated_weights_pca,
+    get_clients_weights_pca,
+)
 from flexanomalies.utils.save_results import save_experiments_results
 from flex.pool import FlexPool
 import os
 import json
+
+
+
+
+
+
 
 def test_autoencoder(
     model_params, X_train, X_test, y_train, y_test, n_clients=3, n_rounds=5
@@ -32,6 +71,7 @@ def test_autoencoder(
     output_model.evaluate(X_test, y_test)
     return output_model
 
+
 def test_cluster(
     model_params, X_train, X_test, y_train, y_test, n_clients=3, n_rounds=5
 ):
@@ -49,7 +89,7 @@ def test_cluster(
         pool.servers.map(copy_model_to_clients_cl, pool.clients)
         pool.clients.map(train_cl)
         pool.aggregators.map(get_clients_weights_cl, pool.clients)
-        pool.aggregators.map(aggregate_cl,model = model)
+        pool.aggregators.map(aggregate_cl, model=model)
         pool.aggregators.map(set_aggregated_weights_cl, pool.servers)
     output_model = pool.servers._models["cluster_server"]["model"]
     output_model.evaluate(X_test, y_test)
@@ -78,9 +118,7 @@ def test_iforest(
     return output_model
 
 
-def test_pca(
-    model_params, X_train, X_test, y_train, y_test, n_clients=3, n_rounds=5
-):
+def test_pca(model_params, X_train, X_test, y_train, y_test, n_clients=3, n_rounds=5):
     model = PCA_Anomaly(**model_params)
     flex_dataset = federate_data(n_clients, X_train, y_train)
     pool = FlexPool.client_server_pool(
@@ -102,8 +140,12 @@ def test_pca(
     return output_model
 
 
-
-model_tests = {"autoencoder": test_autoencoder, "cluster": test_cluster, "pca_anomaly":test_pca, "iforest":test_iforest}
+model_tests = {
+    "autoencoder": test_autoencoder,
+    "cluster": test_cluster,
+    "pca_anomaly": test_pca,
+    "iforest": test_iforest,
+}
 
 
 def hub(
@@ -140,7 +182,9 @@ def hub(
             else json_file.split("/")[-1].split(".")[0]
         )
     elif not model_params or not model or not dataset:
-        raise Exception("Must provide json_file or `model_params`, `model`, `dataset` and `output_name`")
+        raise Exception(
+            "Must provide json_file or `model_params`, `model`, `dataset` and `output_name`"
+        )
     else:
         model_params = json.loads(model_params)
 
@@ -192,9 +236,6 @@ def save_experiments_results(
         indent=4,
         ensure_ascii=False,
     )
-    model_path = f'{output_path}/model/'
+    model_path = f"{output_path}/model/"
     os.makedirs(model_path, exist_ok=True)
     model.save_model(model_path)
-    
- 
- 

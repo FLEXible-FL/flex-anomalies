@@ -141,7 +141,7 @@ class DeepCNN_LSTM(BaseModel):
         
         model.add(layers.Flatten())
         model.add(layers.Dense(self.input_dim*self.n_pred, activation= self.output_act))
-    
+        model.add(layers.Reshape((self.n_pred,self.input_dim)))
 
         # Compile model
         model.compile(loss=self.loss, optimizer=self.optimizer)
@@ -171,11 +171,13 @@ class DeepCNN_LSTM(BaseModel):
     def predict(self, X,y):
        
         prediction = self.model.predict(X)
-        self.d_scores_ = distances(y,prediction)       
+         
+        self.d_scores_ = (np.linalg.norm(y - prediction, axis = 2))
         
         self.process_scores_with_percentile()
         
-        return self 
+        return prediction 
+    
     
     def decision_function(self,X,y):
         """
@@ -187,7 +189,7 @@ class DeepCNN_LSTM(BaseModel):
 
         # Predict X and return reconstruction errors
         prediction = self.model.predict(X)
-        return distances(y, prediction)
+        return (np.linalg.norm(y - prediction, axis = 2))
 
     def load_model(self, model_path=""):
         self.model.load_weights(model_path if model_path else self.model_path)

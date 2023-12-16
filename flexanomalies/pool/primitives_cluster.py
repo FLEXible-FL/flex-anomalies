@@ -2,7 +2,6 @@ from flex.pool import init_server_model
 from flex.model import FlexModel
 from flex.pool import deploy_server_model
 from flex.pool.decorators import collect_clients_weights
-from flex.pool.decorators import aggregate_weights
 from flex.pool.decorators import set_aggregated_weights
 import numpy as np
 from copy import deepcopy
@@ -24,13 +23,6 @@ def copy_model_to_clients_cl(server_flex_model):
 @collect_clients_weights
 def get_clients_weights_cl(client_model):
     return client_model["model"].model.cluster_centers_
-
-
-@aggregate_weights
-def aggregate_cl(list_of_weights: list, model):
-    weight_arr = np.concatenate(list_of_weights)
-    model.fit(weight_arr)
-    return model.cluster_centers_
 
 
 @set_aggregated_weights
