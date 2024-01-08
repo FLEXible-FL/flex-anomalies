@@ -5,6 +5,7 @@ from flex.pool import deploy_server_model
 from flex.pool.decorators import collect_clients_weights
 from flex.pool.decorators import set_aggregated_weights
 from flexanomalies.utils.process_scores import process_scores_with_percentile
+from flexanomalies.utils.metrics import print_metrics
 import numpy as np
 import tensorflow as tf
 from copy import deepcopy
@@ -38,15 +39,34 @@ def train_ae(client_model, client_data):
     model = client_model["model"]
     X_data, y_data = client_data.to_numpy()
     model.fit(X_data, y_data)
-    
-def evaluate_global_model_clients(
-    client_flex_model,
-    client_data,
-    *args, **kwargs
+
+
+def evaluate_global_model(
+    model,
+    X,
+    y,
+    labels,
+    metrics=["Accuracy", "Precision", "F1", "Recall", "AUC_ROC"],
+    threshold=None,
 ):
+    prediction = model.model.predict(X)
+    d_scores = np.mean((y - prediction), axis=2).flatten()
+    if threshold is None:
+        threshold = process_scores_with_percentile(d_scores, 0.1)
+
+    l = (d_scores > threshold).astype("int").ravel()
+    model.result_metrics_ = print_metrics(metrics, labels, l)
+
+
+def evaluate_global_model_clients(client_flex_model, client_data, *args, **kwargs):
 
     X_test, y_test = client_data.to_numpy()
-    p = client_flex_model['model'].predict(X_test, y_test)
-    d_scores = (np.linalg.norm(y_test - p, axis = 2))
+    p = client_flex_model["model"].predict(X_test, y_test)
+
+    d_scores = np.mean((y_test - p), axis=2).flatten()
     threshold = process_scores_with_percentile(d_scores, 0.1)
-    return threshold
+    client_flex_model["threshold"] = threshold
+
+
+def threshold_collector_ae(client_model, client_data):
+    return client_model["threshold"]
