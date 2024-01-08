@@ -10,7 +10,7 @@ from flexanomalies.pool.primitives_deepmodel import (
     copy_model_to_clients_ae,
     train_ae,
     set_aggregated_weights_ae,
-    weights_collector_ae,
+    weights_collector_ae
 )
 from flexanomalies.pool.aggregators_favg import aggregate_ae
 from flexanomalies.pool.aggregators_cl import aggregate_cl
@@ -41,11 +41,6 @@ from flexanomalies.utils.save_results import save_experiments_results
 from flex.pool import FlexPool
 import os
 import json
-
-
-
-
-
 
 
 def test_autoencoder(

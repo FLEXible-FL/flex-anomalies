@@ -60,15 +60,19 @@ class AutoEncoder(BaseModel):
         epochs=1,
         optimizer="adam",
         contamination=0.1,
+        w_size=None,
+        n_pred=1,
         preprocess=True,
     ) -> None:
         super(AutoEncoder, self).__init__(contamination=contamination)
         self.input_dim = input_dim
         self.neurons = neurons
         self.model_path = model_path
+        self.w_size = w_size
+        self.n_pred = n_pred
         self.callbacks = []
         self.update_callbacks(callbacks=callbacks)
-        
+
         self.hidden_act = (
             list(hidden_act) * len(neurons)
             if type(hidden_act) is not list
@@ -99,13 +103,20 @@ class AutoEncoder(BaseModel):
         self.callbacks = [model_checkpoint_callback] + callbacks
 
     def _build_model(self):
+
         model = Sequential()
+        
+        if self.w_size is None:
+            input_shape = (self.input_dim,)
+        else:
+            input_shape = (self.w_size, self.input_dim)
+
         # Input layer
         model.add(
             Dense(
                 self.neurons[0],
                 activation=self.hidden_act[0],
-                input_shape=(self.input_dim,),
+                input_shape=input_shape,
             )
         )
 
@@ -146,7 +157,7 @@ class AutoEncoder(BaseModel):
         ).history
         # self.model.load_weights(self.model_path)
 
-    def predict(self, X,y = None):
+    def predict(self, X, y=None):
         if self.preprocess:
             Xscaler = self.scaler.fit_transform(X)
         else:
@@ -159,7 +170,7 @@ class AutoEncoder(BaseModel):
 
         return self
 
-    def decision_function(self, X,y =None):
+    def decision_function(self, X, y=None):
         """
         X : numpy array of shape (n_samples, n_features)
 

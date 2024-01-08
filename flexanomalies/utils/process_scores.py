@@ -8,6 +8,7 @@ def process_scores(d_scores, contamination):
     ind_anomalies = np.flip(np.argsort(d_scores))[:num_anomalies]  # Revisar el orden
     labels_ = np.zeros(len(d_scores))
     labels_[ind_anomalies] = 1
+    return labels_
 
 
 def process_scores_with_percentile(d_scores, contamination):
@@ -17,7 +18,4 @@ def process_scores_with_percentile(d_scores, contamination):
 
 def process_scores_with_threshold(d_scores):
     threshold_ = np.mean(d_scores) + 2 * np.std(d_scores)
-
-    #labels_ = (d_scores > threshold_).astype("int").ravel()
-
     return threshold_
