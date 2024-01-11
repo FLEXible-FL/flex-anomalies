@@ -1,6 +1,6 @@
 from keras.models import Sequential
 from keras.layers import Dense
-from flexanomalies.models import BaseModel
+from flexanomalies.utils import BaseModel
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 from flexanomalies.utils.metrics import *
