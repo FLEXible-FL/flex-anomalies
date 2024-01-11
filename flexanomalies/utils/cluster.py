@@ -1,4 +1,4 @@
-from flexanomalies.models import BaseModel
+from flexanomalies.utils import BaseModel
 from sklearn.cluster import KMeans
 import numpy as np
 from datetime import datetime

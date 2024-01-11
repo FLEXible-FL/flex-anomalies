@@ -1,4 +1,4 @@
-from flexanomalies.models import BaseModel
+from flexanomalies.utils import BaseModel
 import tensorflow as tf
 from keras.models import Sequential
 from keras import layers

@@ -1,4 +1,4 @@
-from flexanomalies.models import BaseModel
+from flexanomalies.utils import BaseModel
 from sklearn.ensemble import IsolationForest as sklearn_IF
 from sklearn.preprocessing import StandardScaler
 import numpy as np
