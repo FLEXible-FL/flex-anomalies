@@ -55,16 +55,4 @@ class BaseModel(object):
         
         return self 
 
-    def process_scores_with_percentile(self):
-            self.threshold_ = percentile(np.mean(self.d_scores_),
-                                         100 * (1 - self.contamination))
-            self.labels_ = (self.d_scores_ > self.threshold_).astype(
-                'int').ravel()
-
-            return self    
-    
-    def  process_scores_with_threshold(self):
-         self.threshold_= np.mean(self.d_scores_) + 2 * np.std(self.d_scores_)
-
-         self.labels_ = (self.d_scores_ > self.threshold_).astype(
-                'int').ravel()
+   

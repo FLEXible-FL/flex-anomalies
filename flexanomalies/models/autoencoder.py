@@ -168,7 +168,7 @@ class AutoEncoder(BaseModel):
 
         self.process_scores()
 
-        return self
+        return prediction_scores
 
     def decision_function(self, X, y=None):
         """

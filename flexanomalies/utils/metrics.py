@@ -33,22 +33,6 @@ def metric_AUC_ROC(y, y_prediction):
     return roc_auc_score(y, y_prediction)
 
 
-def confusion_matrix(y, y_prediction):
-    TP, FP, TN, FN = measure(y, y_prediction)
-    confusion = [[TP, FN], [FP, TN]]
-    x_axis_label = ["abnormal", "benign"]
-    y_axis_label = ["abnormal", "benign"]
-    plt.figure()
-    sns.heatmap(
-        confusion,
-        xticklabels=x_axis_label,
-        yticklabels=y_axis_label,
-        annot=True,
-        annot_kws={"size": 16},
-        fmt="g",
-    )
-
-
 def measure(y, y_prediction):
     TP = 0
     FP = 0
