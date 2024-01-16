@@ -8,6 +8,9 @@ from copy import deepcopy
 
 @init_server_model
 def build_server_model_pca(model):
+    """
+    Function to initialize the server model
+    """
     flex_model = FlexModel()
     flex_model["model"] = model
     return flex_model

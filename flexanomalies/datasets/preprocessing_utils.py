@@ -5,6 +5,10 @@ import pandas as pd
 
 
 def create_windows(w_size, n_pred, X_train, X_test, l_train, l_test):
+
+    """Function to define a sliding window with the following dimensions:
+    Input window dimensions (window size x number of features) and output dimensions (number of features x number of predictions). In addition the label set"""
+
     X_train_windows = []
     y_train_windows = []
     X_test_windows = []
@@ -48,11 +52,16 @@ def create_windows(w_size, n_pred, X_train, X_test, l_train, l_test):
 
 
 def scaling(X):
+    """Scaling Dataset"""
     scaler = StandardScaler()
     return scaler.fit_transform(X)
 
 
 def encode_and_bind(original_dataframe, feature_to_encode):
+
+    """Encoding Categorical Variables:
+    one-hot and dummy encoding can be implemented in Pandas by using its get_dummies function.
+    """
     dummies = pd.get_dummies(original_dataframe[[feature_to_encode]])
     res = pd.concat([original_dataframe, dummies], axis=1)
     res = res.drop([feature_to_encode], axis=1)
@@ -62,6 +71,8 @@ def encode_and_bind(original_dataframe, feature_to_encode):
 def impute_lost_values(
     df, feature_to_impute, n_neighbors=5, metric="nan_euclidean", weights="uniform"
 ):
+
+    """Imputation to complete missing values by means of k-Nearest Neighbors of sklearn"""
 
     # Building the model
     imputer = KNNImputer(n_neighbors=n_neighbors, weights=weights, metric=metric)
@@ -78,6 +89,7 @@ def impute_lost_values(
 
 
 def rolling_mean(df, feature, windows=2, min_periods=1):
+    """Provide rolling window calculation usando sklearn"""
     df["rolling_mean"] = df.rolling(window=windows, min_periods=min_periods)[
         feature
     ].mean()
