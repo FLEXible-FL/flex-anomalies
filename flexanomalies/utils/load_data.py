@@ -25,7 +25,6 @@ def load_and_split_csv(file_path, input_dim, split_size=0.3):
     df = pd.read_csv(file_path)
     X = np.array(df.iloc[:, :(input_dim)])
     y = np.array(df.iloc[:, -1])
-
     return split_data(X, y, split_size)
 
 

@@ -13,6 +13,9 @@ from copy import deepcopy
 
 @init_server_model
 def build_server_model_ae(model):
+    """
+    Function to initialize the server model
+    """
     flex_model = FlexModel()
     flex_model["model"] = model
     return flex_model
@@ -34,10 +37,13 @@ def set_aggregated_weights_ae(server_flex_model, aggregated_weights, *args, **kw
     server_flex_model["model"].model.set_weights(aggregated_weights)
 
 
-def train_ae(client_model, client_data):
+def train_ae(client_model, client_data, **kwargs):
     print("Training model at client.")
     model = client_model["model"]
-    X_data, y_data = client_data.to_numpy()
+    slice = int(0.9 * len(client_data.to_numpy()[0]))
+    X_data = client_data.to_numpy()[0][:slice]
+    y_data = client_data.to_numpy()[1][:slice]
+
     model.fit(X_data, y_data)
 
 
@@ -49,7 +55,18 @@ def evaluate_global_model(
     metrics=["Accuracy", "Precision", "F1", "Recall", "AUC_ROC"],
     threshold=None,
 ):
-    prediction = model.model.predict(X)
+    """Evaluate global model on the server with a global test set.
+
+    Args:
+        server_flex_model (FlexModel): Server Flex Model.
+        X : Array with the data to evaluate.
+        y:Output data matrix. Depending on the chosen window model (it can be the set X).
+        labels: Labels of the data to evaluate.
+        metrics: Metrics to evaluate.
+        threshold: Anomaly threshold to evaluate.
+
+    """
+    prediction = model.predict(X, y)
     d_scores = np.mean((y - prediction), axis=2).flatten()
     if threshold is None:
         threshold = process_scores_with_percentile(d_scores, 0.1)
@@ -59,12 +76,21 @@ def evaluate_global_model(
 
 
 def evaluate_global_model_clients(client_flex_model, client_data, *args, **kwargs):
+    """Evaluate global model on the client.
 
-    X_test, y_test = client_data.to_numpy()
+    Args:
+        client_flex_model (FlexModel): Client Flex Model.
+        client_data: Array with the data to evaluate.
+
+    """
+    slice = int(0.9 * len(client_data.to_numpy()[0]))
+    X_test = client_data.to_numpy()[0][slice:]
+    y_test = client_data.to_numpy()[1][slice:]
     p = client_flex_model["model"].predict(X_test, y_test)
 
     d_scores = np.mean((y_test - p), axis=2).flatten()
     threshold = process_scores_with_percentile(d_scores, 0.1)
+
     client_flex_model["threshold"] = threshold
 
 
