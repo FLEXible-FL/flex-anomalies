@@ -8,13 +8,14 @@ import pickle
 class IsolationForest(BaseModel):
     """
     IsolationForest with scikit-learn
-
+    Parameters of sklearn's IsolationForest model:
     random_state : int, RandomState instance, optional (default=None)
     n_estimators : int, optional (default=100)
     max_samples : float or int, optional (default="auto")
     bootstrap : bool, optional (default=False)
     max_features : float or int, optional (default=1.0)
     n_jobs : int, optional (default=1)
+    Others:
     contamination : float in (0., 0.5), optional (default=0.1)
                     Contamination of the data set, the proportion of outliers in the data set.
 
@@ -67,7 +68,7 @@ class IsolationForest(BaseModel):
         """
         self.model.fit(X=X, y=y)
 
-    def predict(self, X,y = None):
+    def predict(self, X, y=None):
         self.d_scores_ = self.model.decision_function(X)
         self.d_scores_ = (
             self.d_scores_ * -1
@@ -75,7 +76,7 @@ class IsolationForest(BaseModel):
         self.process_scores()
         return self
 
-    def decision_function(self, X,y = None):
+    def decision_function(self, X, y=None):
 
         """
         X : numpy array of shape (n_samples, n_features)

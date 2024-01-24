@@ -6,8 +6,17 @@ import pandas as pd
 
 def create_windows(w_size, n_pred, X_train, X_test, l_train, l_test):
 
-    """Function to define a sliding window with the following dimensions:
-    Input window dimensions (window size x number of features) and output dimensions (number of features x number of predictions). In addition the label set"""
+    """Function to define an example sliding window with the following dimensions:
+       Input window dimensions (window size x number of features) and output dimensions (number of features x number of predictions). In addition the label set
+    
+    Args:
+    ----
+       w_size(int): windows size 
+       n_pred: number of predictions 
+       X_train,X_test: dataset train and test
+       l_train, l_test: labels    
+    
+    """
 
     X_train_windows = []
     y_train_windows = []
@@ -52,7 +61,7 @@ def create_windows(w_size, n_pred, X_train, X_test, l_train, l_test):
 
 
 def scaling(X):
-    """Scaling Dataset"""
+    """ Function Scaling Dataset"""
     scaler = StandardScaler()
     return scaler.fit_transform(X)
 
@@ -61,6 +70,11 @@ def encode_and_bind(original_dataframe, feature_to_encode):
 
     """Encoding Categorical Variables:
     one-hot and dummy encoding can be implemented in Pandas by using its get_dummies function.
+    Args:
+    ----
+    original_dataframe: dataset
+    feature_to_encode (list): this specifies the column names to be encoded.
+ 
     """
     dummies = pd.get_dummies(original_dataframe[[feature_to_encode]])
     res = pd.concat([original_dataframe, dummies], axis=1)
@@ -72,7 +86,8 @@ def impute_lost_values(
     df, feature_to_impute, n_neighbors=5, metric="nan_euclidean", weights="uniform"
 ):
 
-    """Imputation to complete missing values by means of k-Nearest Neighbors of sklearn"""
+    """Imputation to complete missing values by means of k-Nearest Neighbors of sklearn
+    """
 
     # Building the model
     imputer = KNNImputer(n_neighbors=n_neighbors, weights=weights, metric=metric)
@@ -90,6 +105,7 @@ def impute_lost_values(
 
 def rolling_mean(df, feature, windows=2, min_periods=1):
     """Provide rolling window calculation usando sklearn"""
+    
     df["rolling_mean"] = df.rolling(window=windows, min_periods=min_periods)[
         feature
     ].mean()
