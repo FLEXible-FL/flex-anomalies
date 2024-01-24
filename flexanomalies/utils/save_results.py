@@ -12,6 +12,11 @@ def save_experiments_results(
     n_rounds,
     split_size,
 ):
+    """function to save the experiment results ( model parameters, model and experimental parameters)
+    Args:
+    ----
+        model parameters, model and experimental parameters
+    """
     exp_result = {}
     exp_result["model_name"] = model_name
     exp_result["dataset"] = dataset

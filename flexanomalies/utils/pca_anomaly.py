@@ -7,6 +7,20 @@ import pickle
 
 
 class PCA_Anomaly(BaseModel):
+
+    """PCA with scikit-learn
+    Parameters of sklearn's PCA model:
+    n_components : int, float or 'mle', default=None
+    n_selected_components : int, number of selected principal components, default=None
+    random_state : int, RandomState instance or None, default None
+    Others:
+    preprocess : bool, If true, standardize features , optional (default=True)
+    contamination : float in (0., 0.5), optional (default=0.1)
+                    Contamination of the data set, the proportion of outliers in the data set.
+    model_path: str optional (default= '')
+
+    """
+
     def __init__(
         self,
         n_components=None,
@@ -65,7 +79,7 @@ class PCA_Anomaly(BaseModel):
 
         self.model.fit(X=Xscaler, y=y)
 
-    def predict(self, X, y = None):
+    def predict(self, X, y=None):
 
         if self.preprocess:
             Xscaler = self.scaler.fit_transform(X)
@@ -105,7 +119,7 @@ class PCA_Anomaly(BaseModel):
         self.process_scores()
         return self
 
-    def decision_function(self, X,y = None):
+    def decision_function(self, X, y=None):
         """
         X : numpy array of shape (n_samples, n_features)
 

@@ -1,3 +1,8 @@
+"""
+Example file, to perform tests from console, using the defined models, federating the data and examples of input data in .json format (test_json). 
+It must be executed from outside. 
+"""
+
 from flexanomalies.utils import (
     AutoEncoder,
     ClusterAnomaly,
@@ -10,7 +15,7 @@ from flexanomalies.pool.primitives_deepmodel import (
     copy_model_to_clients_ae,
     train_ae,
     set_aggregated_weights_ae,
-    weights_collector_ae
+    weights_collector_ae,
 )
 from flexanomalies.pool.aggregators_favg import aggregate_ae
 from flexanomalies.pool.aggregators_cl import aggregate_cl
@@ -237,7 +242,6 @@ def save_experiments_results(
     model.save_model(model_path)
 
 
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.description = "CLI application for outlier detection experiments in a federated environment, we can handle two options for experiment params, a json file with all params is preferred and the output will take the same name as the experiment file"
@@ -268,6 +272,6 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
-    args = {k:v for k,v in args.__dict__.items() if v is not None}
+    args = {k: v for k, v in args.__dict__.items() if v is not None}
     print(args)
     hub(**args)

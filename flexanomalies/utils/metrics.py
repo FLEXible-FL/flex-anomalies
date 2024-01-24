@@ -51,9 +51,13 @@ def measure(y, y_prediction):
 
 
 def print_metrics(list_metrics, y, y_prediction):
-    """
-    function to print the metrics:
+    """function to print the metrics
+    Args:
+    ----
+    y: labels
+    y_prediction: predicted labels
     list_metrics: list, containing list of metrics to display, metrics name (Accuracy, Precision, F1, Recall, AUC_ROC, ConfusionMatrix).
+
     """
     metrics = {}
 

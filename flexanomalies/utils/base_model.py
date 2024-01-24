@@ -5,6 +5,7 @@ from flexanomalies.utils.metrics import *
 from numpy import percentile
 
 """
+Base model
 contamination : float in (0., 0.5), optional (default=0.1)
                 Contamination of the data set, the proportion of outliers in the data set.
 """

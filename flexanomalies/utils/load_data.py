@@ -6,11 +6,24 @@ from flex.data import FedDatasetConfig, FedDataDistribution, Dataset
 
 
 def split_data(X, y, split_size=0.30):
-    # Generate train-test splits
+    """function to generate train-test splits with sklearn
+
+    Returns:
+    -------
+           sklearn train-test splits
+
+    """
     return train_test_split(X, y, test_size=split_size, random_state=42)
 
 
 def load_and_split_dot_mat(file_path, split_size=0.3):
+    """Function that loads .mat datasets and generate train-test splits with sklearn
+
+    Returns:
+    -------
+           sklearn train-test splits
+
+    """
     mat = scipy.io.loadmat(file_path)
     data = {"X": mat["X"].tolist(), "y": mat["y"].tolist()}
 
@@ -22,6 +35,16 @@ def load_and_split_dot_mat(file_path, split_size=0.3):
 
 
 def load_and_split_csv(file_path, input_dim, split_size=0.3):
+    """Function that loads csv datasets and generate train-test splits with sklearn.
+       Make sure labels are at the end
+    Args:
+    ----
+            input_dim: number of attributes
+    Returns:
+    -------
+            sklearn train-test splits
+
+    """
     df = pd.read_csv(file_path)
     X = np.array(df.iloc[:, :(input_dim)])
     y = np.array(df.iloc[:, -1])
@@ -29,6 +52,14 @@ def load_and_split_csv(file_path, input_dim, split_size=0.3):
 
 
 def federate_data(n_clients, x, y):
+    """function to federate a centralized dataset using FLEXible with FedDatasetConfig. Review FLEXible
+    Args:
+    ----
+           n_clients: number of clients
+    Returns:
+    -------
+            flex_dataset
+    """
     data = Dataset.from_array(x, y)
     config = FedDatasetConfig(seed=0)
     config.n_nodes = n_clients
