@@ -1,4 +1,4 @@
-# flex-anomalies 
+`# flex-anomalies 
 flex-anomalies is a Python library dedicated to anomaly detection in machine learning. It offers a wide range of algorithms and techniques, including models based on distance, density, trees, and neural networks such as convolutional and recurrent architectures. The library also provides aggregators, anomaly score processing techniques, and pre-processing techniques for data. 
 
 Anomaly detection involves examining data and detecting deviations or anomalies present in the data, with the goal of purifying data sets and identifying anomalies for further analysis.
@@ -22,8 +22,11 @@ function to federate a centralized dataset using FLEXible and data loading.
 
 #### Explanatory Notebooks
 - **AnomalyDetection_Autoencoder_FLEX.ipynb**: A notebook showing a step-by-step example of how to use Auto Encoder model for anomaly detection with federated learning for static data.
-- **AnomalyDetection_Cluster_Cluster_FLEX.ipynb**: Notebook showing a step-by-step example of how to use the ClusterAnomaly model for anomaly detection with federated learning for static data and evaluating the model on test sets. 
-
+- **AnomalyDetection_AutoEncoder_FLEX_ts.ipynb**: Notebook showing a step-by-step example of how to use the Auto Encoder model for anomaly detection with federated learning for time series.The structure of the sliding window, data federation, federated training and model evaluation at the server and client level.
+- **AnomalyDetection_PCA_FLEX.ipynb**: A notebook demonstrating the application of PCA_Anomaly for anomaly detection with federated learning for a static dataset.
+- **AnomalyDetection_Cluster_FLEX.ipynb**: Notebook showing a step-by-step example of how to use the ClusterAnomaly model for anomaly detection with federated learning for static data and evaluating the model on test sets. 
+- **AnomalyDetection_IsolationForest_FLEX.ipynb**: Notebook showing an example of how to use the IsolationForest  model with federated learning for an example set of static data.  From data federation and training to model evaluation on a test set.
+- **AnomalyDetection_CNNN_LSTM_FLEX_ts.ipynb**: Notebook showing the use of the DeepCNN_LSTM model with federated learning for anomaly detection in time series. The structure of the sliding window, data federation, federated training and model evaluation at server and client level.
 
 ## Features
 For more information on the implemented algorithms see the table that follows:
