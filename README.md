@@ -104,8 +104,11 @@ Install the necessary dependencies:
 
 ```pip install -r requirements.txt```
 
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 ## Citation
 
 If you use this repository in your research work, please cite the Flexible paper: 
-
-
