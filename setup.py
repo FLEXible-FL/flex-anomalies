@@ -20,7 +20,7 @@ setup(
     name="flexanomalies",
     version="0.0.1",
     authors="Ignacio Aguilera Martos and Beatriz Bello García",
-    keywords="anomaly detection federated-learning flexible time series ",
+    keywords="anomaly detection federated-learning flexible outlier",
     long_description=open("README.md", "r", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     packages=find_packages(),
