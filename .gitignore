@@ -160,7 +160,8 @@ cython_debug/
 #.idea/
 
 
+
 results/
-
-
 data/
+twine_check.sh
+twine_upload.sh
