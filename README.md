@@ -100,7 +100,7 @@ For more information on the implemented algorithms see the table that follows:
 
 FLEX-Anomalies is available on the PyPi repository and can be easily installed using: 
 
-``` pip: pip install flex-anomalies ```
+``` pip: pip install flexanomalies ```
 
 Install the necessary dependencies:
 
