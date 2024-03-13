@@ -1,3 +1,5 @@
+<img src="Anomaly.png" width="100">
+
 # flex-anomalies 
 flex-anomalies is a Python library dedicated to anomaly detection in machine learning. It offers a wide range of algorithms and techniques, including models based on distance, density, trees, and neural networks such as convolutional and recurrent architectures. The library also provides aggregators, anomaly score processing techniques, and pre-processing techniques for data. 
 
