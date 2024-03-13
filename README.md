@@ -8,7 +8,7 @@ Anomaly detection involves examining data and detecting deviations or anomalies 
 
 ### Details
 
-Anomaly Detection with FLEXible Federated Learning: This repository contains implementations of anomaly detection algorithms using the Flexible Federated Learning library. FLEXible is a Python library for realizing federated learning in an efficient and scalable manner. 
+Anomaly Detection with <a href=https://github.com/FLEXible-FL/FLEXible/tree/main>FLEXible</a> Federated Learning: This repository contains implementations of anomaly detection algorithms using the Flexible Federated Learning library. <a href=https://github.com/FLEXible-FL/FLEXible/tree/main>FLEXible</a> is a Python library for realizing federated learning in an efficient and scalable manner. 
 From the study of state-of-the-art research works on federated learning for network intrusion detection.
 
 This repository also includes:
@@ -47,7 +47,7 @@ For more information on the implemented algorithms see the table that follows:
              Algorithm for data anomaly detection, detects anomalies using binary trees. 
             </td>
             <td>
-            <a href=>
+            <a href=https://ieeexplore.ieee.org/document/4781136>
             Liu, F.T., Ting, K.M. and Zhou, Z.H., 2008, December. Isolation forest. In *International Conference on Data Mining*\ , pp. 413-422. IEEE.
             </td>    
         </tr>
@@ -57,7 +57,7 @@ For more information on the implemented algorithms see the table that follows:
             Principal component analysis (PCA), algorithm for detecting outlier.Outlier scores can be obtained as  the sum of weighted euclidean distance between each sample to the hyperplane constructed by the selected eigenvectors
             </td>
             <td>
-            <a href=>
+            <a href=https://www.researchgate.net/publication/228709094_A_Novel_Anomaly_Detection_Scheme_Based_on_Principal_Component_Classifier>
             Shyu, M.L., Chen, S.C., Sarinnapakorn, K. and Chang, L., 2003. A novel anomaly detection scheme based on principal component classifier. *MIAMI UNIV CORAL GABLES FL DEPT OF ELECTRICAL AND COMPUTER ENGINEERING*.
             </td>    
         </tr>
@@ -67,7 +67,7 @@ For more information on the implemented algorithms see the table that follows:
                Model based on clustering. Outliers scores are solely computed based on their distance to the closest large cluster center, kMeans is used for clustering algorithm.
             </td>
             <td>
-            <a href=>
+            <a href=https://epubs.siam.org/doi/10.1137/1.9781611972832.21>
             Chawla, S., & Gionis, A. (2013, May). k-means–: A unified approach to clustering and outlier detection. In Proceedings of the 2013 SIAM international conference on data mining (pp. 189-197).
             </td>    
         </tr>
@@ -77,7 +77,7 @@ For more information on the implemented algorithms see the table that follows:
             Neural network model for time series and static data including convolutional and recurrent architecture.
             </td>
             <td>
-            <a href=>
+            <a href=https://arxiv.org/abs/2206.03179>
             Aguilera-Martos, I., García-Vico, Á. M., Luengo, J., Damas, S., Melero, F. J., Valle-Alonso, J. J., & Herrera, F. (2022). TSFEDL: A Python Library for Time Series Spatio-Temporal Feature Extraction and Prediction using Deep Learning (with Appendices on Detailed Network Architectures and Experimental Cases of Study). arXiv preprint arXiv:2206.03179.
             </td>    
         </tr>
@@ -87,7 +87,7 @@ For more information on the implemented algorithms see the table that follows:
              Fully connected AutoEncoder for time series and static data. Neural network for learning useful data   representations unsupervisedly. detect  anomalies in the data by calculating the reconstruction.
             </td>
             <td>
-            <a href=>
+            <a href=https://link.springer.com/chapter/10.1007/978-3-319-14142-8_8>
             Aggarwal, C.C., 2015. Outlier analysis. In Data mining (pp. 237-263), Ch.3. Springer, Cham. Ch.3
             </td>    
         </tr>
